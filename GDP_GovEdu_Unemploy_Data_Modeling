@@ -1,0 +1,23 @@
+# Project name: GDP_GovEdu_Unemploy_Data_Modeling
+#Project team: Alina Stoenescu, Vlad Banea, Veronica Trocea, Silvia Buturca
+
+import pandas as pd
+import matplotlib.pyplot as plt
+frame = pd.read_csv(r"C:\Users\ptanas\Desktop\Python Course\vlad\Data_Python.csv", index_col=0)
+frame = frame.dropna()
+frame
+frame.describe()
+corr = frame[['perCapitaGDPinPPS', 'GovEduExpenditure', 'UnemploymentRate']]
+corr.corr()
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+mod = smf.ols(formula='perCapitaGDPinPPS ~ GovEduExpenditure ', data=frame)
+res = mod.fit()
+print(res.summary())
+fig, ax = plt.subplots(figsize=(12,8))
+fig = sm.graphics.influence_plot(res, ax=ax, criterion="cooks")
+mod = smf.ols(formula='perCapitaGDPinPPS ~ UnemploymentRate + GovEduExpenditure ', data=frame)
+res = mod.fit()
+print(res.summary())
+fig, ax = plt.subplots(figsize=(12,8))
+fig = sm.graphics.influence_plot(res, ax=ax, criterion="cooks")
